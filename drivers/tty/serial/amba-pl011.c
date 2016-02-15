@@ -34,6 +34,7 @@
 #define SUPPORT_SYSRQ
 #endif
 
+#include <linux/major.h>
 #include <linux/module.h>
 #include <linux/ioport.h>
 #include <linux/init.h>
@@ -62,7 +63,7 @@
 
 #define UART_NR			14
 
-#define SERIAL_AMBA_MAJOR	204
+#define SERIAL_AMBA_MAJOR	TTY_MAJOR
 #define SERIAL_AMBA_MINOR	64
 #define SERIAL_AMBA_NR		UART_NR
 
@@ -2116,7 +2117,7 @@ static int __init pl011_console_setup(struct console *co, char *options)
 
 static struct uart_driver amba_reg;
 static struct console amba_console = {
-	.name		= "ttyAMA",
+	.name		= "ttyS",
 	.write		= pl011_console_write,
 	.device		= uart_console_device,
 	.setup		= pl011_console_setup,
@@ -2161,8 +2162,8 @@ OF_EARLYCON_DECLARE(pl011, "arm,pl011", pl011_early_console_setup);
 
 static struct uart_driver amba_reg = {
 	.owner			= THIS_MODULE,
-	.driver_name		= "ttyAMA",
-	.dev_name		= "ttyAMA",
+	.driver_name		= "ttyS",
+	.dev_name		= "ttyS",
 	.major			= SERIAL_AMBA_MAJOR,
 	.minor			= SERIAL_AMBA_MINOR,
 	.nr			= UART_NR,

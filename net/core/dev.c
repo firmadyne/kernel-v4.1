@@ -5896,6 +5896,11 @@ int dev_set_mac_address(struct net_device *dev, struct sockaddr *sa)
 	const struct net_device_ops *ops = dev->netdev_ops;
 	int err;
 
+	if (dev->priv_flags & IFF_EBRIDGE) {
+		//Changing bridge mac-addrs only causes issues
+		return 0;
+	}
+
 	if (!ops->ndo_set_mac_address)
 		return -EOPNOTSUPP;
 	if (sa->sa_family != dev->type)
