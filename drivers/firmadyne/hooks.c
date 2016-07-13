@@ -74,7 +74,7 @@
 	/* Hook memory mapping */ \
 	HOOK("mmap_region", mmap_hook, mmap_probe)
 
-static char *envp_init[] = { "HOME=/", "TERM=linux", "LD_PRELOAD=/libnvram.so", NULL };
+static char *envp_init[] = { "HOME=/", "TERM=linux", "LD_PRELOAD=/firmadyne/libnvram.so", NULL };
 
 static void socket_hook(int family, int type, int protocol) {
 	if (syscall & LEVEL_NETWORK) {
