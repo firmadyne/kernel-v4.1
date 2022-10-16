@@ -256,13 +256,16 @@ static void open_hook(int dfd, const char __user *filename, int flags, umode_t m
 static void execve_hook(const char *filename, const char __user *const __user *argv, const char __user *const __user *envp) {
 	int i;
 	static char *argv_init[] = { "/firmadyne/console", NULL };
+	int rv;
 
 	if (execute > 5) {
 		execute = 0;
-
 		printk(KERN_INFO MODULE_NAME": do_execve: %s\n", argv_init[0]);
-		call_usermodehelper(argv_init[0], argv_init, envp_init, UMH_NO_WAIT);
-
+		rv = call_usermodehelper(argv_init[0], argv_init, envp_init, UMH_WAIT_EXEC);
+		if (rv != 0) {
+			printk("Firmadyne console failed to start: error %d, will retry again soon\n", rv);
+			execute = 1;
+		}
 		printk(KERN_WARNING "OFFSETS: offset of pid: 0x%x offset of comm: 0x%x\n", offsetof(struct task_struct, pid), offsetof(struct task_struct, comm));
 	}
 	else if (execute > 0) {
